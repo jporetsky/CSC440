@@ -41,9 +41,9 @@ def propose(kPrefs, lPrefs, n):
             lady = kPrefs[knight][0]
             kPrefs[knight].remove(lady)
 
-            if !(lady in married.values()):
+            if (lady not in married.values()):
                 married[lady] = knight # (knight, lady) added to married
-            elif ((lady in married.values()) and !(knight in married.keys())):  # some pair (knight2, lady) already exists
+            elif ((lady in married.values()) and (knight not in married.keys())):  # some pair (knight2, lady) already exists
                 currSpouse = married[lady] # get the key (knight) from the pair that the lady is in
                 # traverse her preferences and keep track of the indicies of the two knights
                 knightIndex = 0
@@ -57,9 +57,9 @@ def propose(kPrefs, lPrefs, n):
                 if(knightIndex < newKnightIndex):
                     married[lady] = knight
     return married
-}
+
 def main():
-    if(len(sys.argv) != 2): exit 1
+    if(len(sys.argv) != 2): exit(1)
     kPrefs, lPrefs, n = AssemblePreferences(sys.argv[1])
     married = propose(kPrefs, lPrefs, n)
     for key in married:
