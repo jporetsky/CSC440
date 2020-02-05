@@ -38,24 +38,28 @@ def propose(kPrefs, lPrefs, n):
     married = {}
     while (len(married) < n):
         for knight in kPrefs: 
-            lady = kPrefs[knight][0]
-            kPrefs[knight].remove(lady)
+            if(knight not in married.values()):
+                lady = kPrefs[knight][0]
+                kPrefs[knight].remove(lady)
 
-            if (lady not in married.values()):
-                married[lady] = knight # (knight, lady) added to married
-            elif ((lady in married.values()) and (knight not in married.keys())):  # some pair (knight2, lady) already exists
-                currSpouse = married[lady] # get the key (knight) from the pair that the lady is in
-                # traverse her preferences and keep track of the indicies of the two knights
-                knightIndex = 0
-                newKnightIndex = 0
-                for i in range(0, n-1):
-                    if(lPrefs[lady][i] == currSpouse):
-                        knightIndex = i
-                    elif(lPrefs[lady][i] == knight):
-                        newKnightIndex = i
-                # compare the indices
-                if(knightIndex < newKnightIndex):
-                    married[lady] = knight
+                if (lady not in married.keys()):
+                    married[lady] = knight # (knight, lady) added to married
+                elif (lady in married.keys()):  # some pair (knight2, lady) already exists
+                    currSpouse = married[lady] # get the key (knight) from the pair that the lady is in
+                    # traverse her preferences and keep track of the indicies of the two knights
+                    knightIndex = 0
+                    newKnightIndex = 0
+                    for i in range(0, n-1):
+                        if(lPrefs[lady][i] == currSpouse):
+                            knightIndex = i
+                        elif(lPrefs[lady][i] == knight):
+                            newKnightIndex = i
+                    # compare the indices
+                    if(knightIndex < newKnightIndex):
+                        del married[lady]
+                        married[lady] = knight
+
+
     return married
 
 def main():
