@@ -21,14 +21,13 @@ while (knight is-not-in married[]):
     lady = arr[0] 
 
     if(lady is-not-in married[])
-       (knight, lady) become engaged
+       (knight, lady) added to married[]
 
     else some pair (knight2, lady) already exists
-       if lady prefers knight to knight2
-          (knight, lady) become engaged
-           knight2 removed from married[]
-       else
-          (knight2, lady) remain engaged    
+        if lady prefers knight to knight2
+            (knight, lady) become engaged
+            (knight2, lady) removed from married[]
+        else
+            (knight2, lady) remain engaged    
 }
-########################################################
 

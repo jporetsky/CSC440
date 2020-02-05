@@ -35,12 +35,27 @@ def AssemblePreferences(fileName):
     print("Knights: ", KnightPrefs) # FOR TESTING
     print("Ladies: ", LadyPrefs) # FOR TESTING
 
-    return KnightPrefs, LadyPrefs # returns dictionaries
+    return KnightPrefs, LadyPrefs, n # returns dictionaries
 
-def propose(kPrefs, lPrefs):
+def propose(kPrefs, lPrefs, n):
+    married[] = ("","")
+    while (len(married[])):
+        for knight in kPrefs: 
+            arr[] = knightPrefs["knight"]
+            lady = arr[0] 
 
+            if(lady is-not-in married[])
+            (knight, lady) added to married[]
+
+            else some pair (knight2, lady) already exists
+                if lady prefers knight to knight2
+                    (knight, lady) become engaged
+                    (knight2, lady) removed from married[]
+                else
+                    (knight2, lady) remain engaged    
+}
 def main():
-    kPrefs, lPrefs = AssemblePreferences(sys.argv[1])
+    kPrefs, lPrefs, n = AssemblePreferences(sys.argv[1])
     
 
 main()
