@@ -1,0 +1,9 @@
+4
+Bk Fl Gl Sl Dl
+Tk Gl Fl Dl Sl
+Pk Sl Gl Dl Fl
+Ok Gl Dl Fl Sl
+Gl Bk Tk Pk Ok
+Dl Tk Bk Pk Ok
+Sl Pk Ok Tk Bk
+Fl Pk Tk Ok Bk
