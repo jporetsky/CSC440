@@ -1,4 +1,5 @@
 import sys
+import timeit
 
 def AssemblePreferences(fileName):
     #Dictionary with knights as keys and list of Ladies as values
@@ -14,8 +15,8 @@ def AssemblePreferences(fileName):
             lineCount+=1 # tracks line number.
             line = line.strip() #removes newline char from each line
             choices = line.split(" ") #Makes an array with elements being each name on the line
-            if(lineCount == 1 and len(choices)==1): n = int(line)   #base case. finds value of n
 
+            if(lineCount == 1 and len(choices)==1): n = int(line)   #base case. finds value of n
             #######  ERROR CHECKING  #######
             elif(lineCount == 1 and len(choices)!=1): exit(1) # ensures line 1 always has 1 value
             if(lineCount>1 and len(choices) != n+1): exit(1) #Check for file format error (num of names per line)
@@ -47,15 +48,12 @@ def propose(kPrefs, lPrefs, n):
                 elif (lady in married.keys()):  # some pair (knight2, lady) already exists
                     currSpouse = married[lady] # get the key (knight) from the pair that the lady is in
                     # traverse her preferences and keep track of the indicies of the two knights
-                    knightIndex = 0
-                    newKnightIndex = 0
-                    for i in range(0, n-1):
-                        if(lPrefs[lady][i] == currSpouse):
-                            knightIndex = i
-                        elif(lPrefs[lady][i] == knight):
-                            newKnightIndex = i
+                    knightIndex = lPrefs[lady].index(currSpouse)
+                    newKnightIndex = lPrefs[lady].index(knight)
+
+                    #print("Old: ", knightIndex, " New: ", newKnightIndex, "\n")
                     # compare the indices
-                    if(knightIndex < newKnightIndex):
+                    if(newKnightIndex < knightIndex):
                         del married[lady]
                         married[lady] = knight
 
@@ -69,4 +67,6 @@ def main():
     for key in married:
         print(married[key] + " " + key)
 
-main()
+#print >> sys.stderr, (timeit.timeit(setup=main, stmt=main, number=1))
+
+##### TIME RECORDS #####
