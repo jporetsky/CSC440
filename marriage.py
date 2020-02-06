@@ -1,11 +1,13 @@
 import sys
 import timeit
 
+#Invariants: If there are n knights and n ladies in the file, the file is 2n+1 lines in length
+#Intialization: The first line of the file specifies the number of knights and number of ladies
+#Maintenance: Every subsequent iteration of the loop after the first one adds the preferences of that knight/lady to a dictionary
+#Termination: This function will end with every knight having a defined set of preferences listed out
 def AssemblePreferences(fileName):
-    #Dictionary with knights as keys and list of Ladies as values
-        #for every knight, set them to free (not married)
-    KnightPrefs = {}
-    LadyPrefs = {}
+    KnightPrefs = {} # Dictionary with knights as keys and list of ladies as values
+    LadyPrefs = {} # Dictionary with ladies as keys and list of knights as values
     lineCount = 0
     n = 0
     #Open the file and put the preferences in dictionaries
@@ -16,7 +18,7 @@ def AssemblePreferences(fileName):
             line = line.strip() #removes newline char from each line
             choices = line.split(" ") #Makes an array with elements being each name on the line
 
-            if(lineCount == 1 and len(choices)==1): n = int(line)   #base case. finds value of n
+            if(lineCount == 1 and len(choices)==1): n = int(line)   #base case. finds the number of knights and ladies
             #######  ERROR CHECKING  #######
             elif(lineCount == 1 and len(choices)!=1): exit(1) # ensures line 1 always has 1 value
             if(lineCount>1 and len(choices) != n+1): exit(1) #Check for file format error (num of names per line)
@@ -35,9 +37,13 @@ def AssemblePreferences(fileName):
 
     return KnightPrefs, LadyPrefs, n # returns dictionaries
 
+#Invariant: This function will always result in a dictionary of n pairs with nobody left unpaired
 def propose(kPrefs, lPrefs, n):
     married = {}
     while (len(married) < n):
+        #Intialization: Nobody is paired
+        #Maintenance: During every iteration, a knight proposes to one of his preferences and a pair is either created or modified
+        #Termination: the end of this loop will result in all knights being paired
         for knight in kPrefs: 
             if(knight not in married.values()):
                 lady = kPrefs[knight][0]
