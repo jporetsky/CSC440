@@ -76,3 +76,5 @@ def main():
 #print >> sys.stderr, (timeit.timeit(setup=main, stmt=main, number=1))
 
 ##### TIME RECORDS #####
+
+main()
