@@ -83,7 +83,21 @@ def merge(left, right):
 			j= (j+1) % len(right)	#if we have q points in B
 		else:
 			i= (i-1) % len(left)	#if we have p points in A
+
 	mergedHull = {left[i], right[j]} #place the upper tangent points in the new merged hull
+
+	#Find the lower tangent
+	i=0
+	j=0
+	while((yint(left[i], right[j+1], left[i][0], left[i][1], right[j+1][1]) > yint(left[i], right[j], left[i][0], left[i][1], right[j][1])) or (yint(left[i-1], right[j], left[i-1][0], left[i-1][1], right[j]) > yint(left[i], right[j], left[i][0], left[i][1], right[j][1]))):
+		if yint(left[i], right[j-1]) < yint(left[i], right[j]):	#move right finger clockwise
+			j= (j-1) % len(right)	#if we have q points in B
+		else:
+			i= (i+1) % len(left)	#if we have p points in A
+
+	#add the lower tangent to the end of the new merged hull
+	mergedHull.append(left[i])
+	mergedHull.append(right[j])
 
 '''
 Replace the implementation of computeHull with a correct computation of the convex hull
