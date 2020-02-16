@@ -57,7 +57,6 @@ def propose(kPrefs, lPrefs, n):
                     knightIndex = lPrefs[lady].index(currSpouse)
                     newKnightIndex = lPrefs[lady].index(knight)
 
-                    #print("Old: ", knightIndex, " New: ", newKnightIndex, "\n")
                     # compare the indices
                     if(newKnightIndex < knightIndex):
                         del married[lady]
@@ -72,7 +71,6 @@ def main():
     married = propose(kPrefs, lPrefs, n)
     for key in married:
         print(married[key] + " " + key)
+main()
 
 #print >> sys.stderr, (timeit.timeit(setup=main, stmt=main, number=1))
-
-##### TIME RECORDS #####
