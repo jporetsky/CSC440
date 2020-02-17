@@ -80,7 +80,70 @@ def merge(left, right):
 	#Find the upper tangent
 	i=0
 	j=0
-	while((yint(left[i], right[j+1], left[i][0], left[i][1], right[j+1][1]) > yint(left[i], right[j], left[i][0], left[i][1], right[j][1])) or (yint(left[i-1], right[j], left[i-1][0], left[i-1][1], right[j]) > yint(left[i], right[j], left[i][0], left[i][1], right[j][1]))):
+	
+
+#	while((yint(left[i], right[j+1], left[i][0], left[i][1], right[j+1][1]) > yint(left[i], right[j], left[i][0], left[i][1], right[j][1])) or (yint(left[i-1], right[j], left[i-1][0], left[i-1][1], right[j]) > yint(left[i], right[j], left[i][0], left[i][1], right[j][1]))):
+	
+	### yint args for left ###
+	lp = left[i]  # current point in left hull
+	lp1 = left[i-1] 
+	lp2 = left[i+1]
+
+	ly = left[i][1]
+	ly3 = left[i-1][1]
+	ly4 = left[i+1][1]
+	### yint args for right ###
+	rp = right[j]  # current point in right hull
+	rp1 = right[j-1]
+	rp2 = right[j+1]
+
+	ry = right[j][1]
+	ry3 = right[j-1][1]
+	ry4 = right[j+1][1]
+
+	### yint args for x ###
+	x = lp[0] + ((rp[0] - lp[0])/2) # left's x + (right's x - left's x)/2 finds the x value between two points
+	xplusR = lp[0] + ((rp2[0] - lp[0])/2)  # x val of tangent with point right[j+1] 
+	xminusL = lp1[0] + ((rp[0] - lp1[0])/2) # x val of tangent with point left[i-1] 
+
+	yTang = yint(lp, rp, x, ly, ry) # finds y tangent for current left and right points
+	yTangplusR = yint(lp, rp2, xplusR, ly, ry2) # finds yTang with point right[j+1]
+	yTangminusL = yint(lp2, rp1, xminusL, ly3, rp4) # finds yTang with point right[i-1]
+
+	while(yTangplusR > yTang or yTangminusL > yTang): # <- I think this is incorrect. we need a way to determine the preffered yTang
+		
+	################ gonna have these vals calculated again here for the time being ####################	
+
+		### yint args for left ###
+		lp = left[i]  # current point in left hull
+		lp1 = left[i-1] # finds counter-clockwise point in left
+		lp2 = left[i+1] # finds clockwise point in left (currently unused)
+
+		ly = left[i][1] # y val of current point
+		ly3 = left[i-1][1] # y of counter-clockwise point in left
+		ly4 = left[i+1][1] # y of clockwise point in left (currently unused)
+
+		### yint args for right ###
+		rp = right[j]  # current point in right hull
+		rp1 = right[j-1] 
+		rp2 = right[j+1]
+
+		ry = right[j][1]
+		ry3 = right[j-1][1]
+		ry4 = right[j+1][1]
+
+		### yint args for x ###
+		x = lp[0] + ((rp[0] - lp[0])/2) # left's x + (right's x - left's x)/2 finds the x value between two points
+		xplusR = lp[0] + ((rp2[0] - lp[0])/2)  # x val of tangent with point right[j+1] 
+		xminusL = lp1[0] + ((rp[0] - lp1[0])/2) # x val of tangent with point left[i-1] 
+
+		### yint func returns tuples representing coords of y tangent (x,y) ###
+		yTang = yint(lp, rp, x, ly, ry) # finds y tangent for current left and right points
+		yTangplusR = yint(lp, rp2, xplusR, ly, ry2) # finds yTang with point right[j+1]
+		yTangminusL = yint(lp2, rp1, xminusL, ly3, rp4) # finds yTang with point right[i-1]
+		
+#########################################################################################################################
+
 		if (yint(left[i], right[j+1], left[i][0], left[i][1], right[j+1][1]) > yint(left[i], right[j], left[i][0], left[i][1], right[j][1])):	#move right finger clockwise
 			j= (j+1) % len(right)	#if we have q points in B
 		else:
@@ -88,7 +151,7 @@ def merge(left, right):
 	mergedHull = {left[i], right[j]} #place the upper tangent points in the new merged hull
 
 	#Brute force with two points on left
-	if((len(left) == 2):
+	if(len(left) == 2):
 		mergedHull.extend(left)
 	#Brute force if left side is collinear
 	if(len(left) > 2):
@@ -97,7 +160,7 @@ def merge(left, right):
 				mergedHull.extend(left)
 
 	#Special brute force cases for right side
-	if((len(right) == 2):
+	if(len(right) == 2):
 		mergedHull.extend(right)
 	if(len(right) > 2):
 		for i in range(0, len(right)-2):
