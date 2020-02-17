@@ -17,11 +17,11 @@ def yint(p1, p2, x, y3, y4):
 	x3 = x
 	x4 = x
 
-	px = ( (x1*y2 - y1*x2) * (x3-x4) - (x1-x2) * (x3*y4 - y3*x4) ) / float( (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3-x4) )
-	py = ( (x1*y2 - y1*x2) * (y3-y4) - (y1-y2) * (x3*y4 - y3*x4) ) / float( (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3-x4) )
+#	px = ( (x1*y2 - y1*x2) * (x3-x4) - (x1-x2) * (x3*y4 - y3*x4) ) / float( (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3-x4) )
+#	py = ( (x1*y2 - y1*x2) * (y3-y4) - (y1-y2) * (x3*y4 - y3*x4) ) / float( (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3-x4) )
 
-#	px = 0
-#	py = 0
+	px = 0
+	py = 0
 #	px = ((x1*y2 - y1*x2) * (x3 - x4) - (x1 - x2)*(x3*y4 - y3*x4)) / \
 #		 float((x1 - x2)*(y3 - y4) - (y1 - y2)*(x3 - x4))
 #	py = ((x1*y2 - y1*x2)*(y3-y4) - (y1 - y2)*(x3*y4 - y3*x4)) / \
@@ -118,7 +118,7 @@ def merge(left, right):
 
 
 
-	while(yTangplusR > yTang or yTangminusL > yTang): # <- I think this is incorrect. we need a way to determine the preffered yTang
+	while(yTangplusR[1] > yTang[1] or yTangminusL[1] > yTang[1]): # <- I think this is incorrect. we need a way to determine the preffered yTang
 		
 	################ gonna have these vals calculated again here for the time being ####################	
 
@@ -148,11 +148,15 @@ def merge(left, right):
 		### yint func returns tuples representing coords of y tangent (x,y) ###
 		yTang = yint(lp, rp, x, ly, ry) # finds y tangent for current left and right points
 		yTangplusR = yint(lp, rp2, xplusR, ly, ry4) # finds yTang with point right[j+1]
-		yTangminusL = yint(lp1, rp, xminusL, ly3, ry) # finds yTang with point right[i-1]
-
+		print(yTang)
+		print("lp: ", lp)
+		print("lp[i-1]: ", lp1)
+		print(xminusL)
+		#yTangminusL = yint(lp1, rp, xminusL, ly3, ry) # finds yTang with point right[i-1]
+		yTangminusL = (0,0)
 #########################################################################################################################
 
-		if(yTangplusR > yTang):	#move right finger clockwise
+		if(yTangplusR[1] > yTang[1]):	#move right finger clockwise
 			j= (j+1) % len(right)	#if we have q points in B
 		else:
 			i= (i-1) % len(left)	#if we have p points in A
@@ -203,12 +207,12 @@ def computeHull(points):
 	left_convex = computeHull(points[0:int(len(points)/2)])
 	right_convex = computeHull(points[int(len(points)/2):])
 
-	xMin = min(points, key=lambda point: points[0])
-	xMax = max(points, key=lambda point: points[0])
-	xMid = ((xMax-xMin)/2) + xMin
+	#xMin = min(points, key=lambda point: points[0])
+	#xMax = max(points, key=lambda point: points[0])
+	#xMid = ((xMax-xMin)/2) + xMin
 	
-	left_convex = []
-	right_convex = []
+	#left_convex = []
+	#right_convex = []
 	
 	#print(xMin)
 	#for i in points
