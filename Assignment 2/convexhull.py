@@ -75,16 +75,34 @@ def clockwiseSort(points):
 	points.sort(key = angle)
 
 def merge(left, right):
+	mergedHull = {}
+
 	#Find the upper tangent
 	i=0
 	j=0
 	while((yint(left[i], right[j+1], left[i][0], left[i][1], right[j+1][1]) > yint(left[i], right[j], left[i][0], left[i][1], right[j][1])) or (yint(left[i-1], right[j], left[i-1][0], left[i-1][1], right[j]) > yint(left[i], right[j], left[i][0], left[i][1], right[j][1]))):
-		if yint(left[i], right[j+1]) > yint(left[i], right[j]):	#move right finger clockwise
+		if (yint(left[i], right[j+1], left[i][0], left[i][1], right[j+1][1]) > yint(left[i], right[j], left[i][0], left[i][1], right[j][1])):	#move right finger clockwise
 			j= (j+1) % len(right)	#if we have q points in B
 		else:
 			i= (i-1) % len(left)	#if we have p points in A
-
 	mergedHull = {left[i], right[j]} #place the upper tangent points in the new merged hull
+
+	#Brute force with two points on left
+	if((len(left) == 2):
+		mergedHull.extend(left)
+	#Brute force if left side is collinear
+	if(len(left) > 2):
+		for i in range(0, len(left)-2):
+			if(collinear(left[i], left[i+1], left[i+2])):
+				mergedHull.extend(left)
+
+	#Special brute force cases for right side
+	if((len(right) == 2):
+		mergedHull.extend(right)
+	if(len(right) > 2):
+		for i in range(0, len(right)-2):
+			if(collinear(right[i], right[i+1], right[i+2])):
+				mergedHull.extend(right)
 
 	#Find the lower tangent
 	i=0
@@ -104,12 +122,12 @@ Replace the implementation of computeHull with a correct computation of the conv
 using the divide-and-conquer algorithm
 '''
 def computeHull(points):
-	#base case of three points
-	if(len(points) == 3):
-		print((triangleArea(points[0], points[1], points[2])))
-		return points
 	#sort the given points if they are not already
 	clockwiseSort(points)
+	#base case of three points
+	if(len(points) <= 3):
+		# print((triangleArea(points[0], points[1], points[2])))
+		return points
 	#separate the current points into two halves until the base case is reached
 	left_convex = computeHull(points[0:int(len(points)/2)])
 	right_convex = computeHull(points[int(len(points)/2):])
