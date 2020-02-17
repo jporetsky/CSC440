@@ -17,11 +17,11 @@ def yint(p1, p2, x, y3, y4):
 	x3 = x
 	x4 = x
 
-#	px = ( (x1*y2 - y1*x2) * (x3-x4) - (x1-x2) * (x3*y4 - y3*x4) ) / float( (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3-x4) )
-#	py = ( (x1*y2 - y1*x2) * (y3-y4) - (y1-y2) * (x3*y4 - y3*x4) ) / float( (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3-x4) )
+	px = ( (x1*y2 - y1*x2) * (x3-x4) - (x1-x2) * (x3*y4 - y3*x4) ) / float( (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3-x4) )
+	py = ( (x1*y2 - y1*x2) * (y3-y4) - (y1-y2) * (x3*y4 - y3*x4) ) / float( (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3-x4) )
 
-	px = 0
-	py = 0
+#	px = 0
+#	py = 0
 #	px = ((x1*y2 - y1*x2) * (x3 - x4) - (x1 - x2)*(x3*y4 - y3*x4)) / \
 #		 float((x1 - x2)*(y3 - y4) - (y1 - y2)*(x3 - x4))
 #	py = ((x1*y2 - y1*x2)*(y3-y4) - (y1 - y2)*(x3*y4 - y3*x4)) / \
@@ -81,13 +81,11 @@ def clockwiseSort(points):
 	points.sort(key = angle)
 
 def merge(left, right):
-	mergedHull = {}
+	mergedHull = []
 
 	#Find the upper tangent
 	i=0
 	j=0
-	
-
 #	while((yint(left[i], right[j+1], left[i][0], left[i][1], right[j+1][1]) > yint(left[i], right[j], left[i][0], left[i][1], right[j][1])) or (yint(left[i-1], right[j], left[i-1][0], left[i-1][1], right[j]) > yint(left[i], right[j], left[i][0], left[i][1], right[j][1]))):
 	
 	### yint args for left ###
@@ -115,8 +113,8 @@ def merge(left, right):
 
 	### yint func returns tuples representing coords of y tangent (x,y) ###
 	yTang = yint(lp, rp, x, ly, ry) # finds y tangent for current left and right points
-	yTangplusR = yint(lp, rp2, xplusR, ly, ry2) # finds yTang with point right[j+1]    (x used to be left[i][0] but changed to xplusR)
-	yTangminusL = yint(lp2, rp1, xminusL, ly3, rp4) # finds yTang with point right[i-1]  (x used to be left[i][0] but changed to xminusL)
+	yTangplusR = yint(lp, rp2, xplusR, ly, ry4) # finds yTang with point right[j+1]    (x used to be left[i][0] but changed to xplusR)
+	yTangminusL = yint(lp2, rp, xminusL, ly3, rp) # finds yTang with point right[i-1]  (x used to be left[i][0] but changed to xminusL)
 
 
 
@@ -158,7 +156,7 @@ def merge(left, right):
 			j= (j+1) % len(right)	#if we have q points in B
 		else:
 			i= (i-1) % len(left)	#if we have p points in A
-	mergedHull = {left[i], right[j]} #place the upper tangent points in the new merged hull
+	mergedHull = [left[i], right[j]] #place the upper tangent points in the new merged hull
 
 	#Brute force with two points on left
 	if(len(left) == 2):
@@ -204,6 +202,18 @@ def computeHull(points):
 	#separate the current points into two halves until the base case is reached
 	left_convex = computeHull(points[0:int(len(points)/2)])
 	right_convex = computeHull(points[int(len(points)/2):])
+
+	xMin = min(points, key=lambda point: points[0])
+	xMax = max(points, key=lambda point: points[0])
+	xMid = ((xMax-xMin)/2) + xMin
+	
+	left_convex = []
+	right_convex = []
+	
+	#print(xMin)
+	#for i in points
+	#	if 
+	
 	#merge the two halves back together to find the convex hull
 	merge(left_convex, right_convex)
 	return points
