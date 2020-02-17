@@ -109,8 +109,10 @@ def merge(left, right):
 
 	### yint func returns tuples representing coords of y tangent (x,y) ###
 	yTang = yint(lp, rp, x, ly, ry) # finds y tangent for current left and right points
-	yTangplusR = yint(lp, rp2, xplusR, ly, ry2) # finds yTang with point right[j+1]
-	yTangminusL = yint(lp2, rp1, xminusL, ly3, rp4) # finds yTang with point right[i-1]
+	yTangplusR = yint(lp, rp2, xplusR, ly, ry2) # finds yTang with point right[j+1]    (x used to be left[i][0] but changed to xplusR)
+	yTangminusL = yint(lp2, rp1, xminusL, ly3, rp4) # finds yTang with point right[i-1]  (x used to be left[i][0] but changed to xminusL)
+
+
 
 	while(yTangplusR > yTang or yTangminusL > yTang): # <- I think this is incorrect. we need a way to determine the preffered yTang
 		
@@ -141,12 +143,12 @@ def merge(left, right):
 
 		### yint func returns tuples representing coords of y tangent (x,y) ###
 		yTang = yint(lp, rp, x, ly, ry) # finds y tangent for current left and right points
-		yTangplusR = yint(lp, rp2, xplusR, ly, ry2) # finds yTang with point right[j+1]
-		yTangminusL = yint(lp2, rp1, xminusL, ly3, rp4) # finds yTang with point right[i-1]
+		yTangplusR = yint(lp, rp2, xplusR, ly, ry4) # finds yTang with point right[j+1]
+		yTangminusL = yint(lp1, rp, xminusL, ly3, ry) # finds yTang with point right[i-1]
 
 #########################################################################################################################
 
-		if (yint(left[i], right[j+1], left[i][0], left[i][1], right[j+1][1]) > yint(left[i], right[j], left[i][0], left[i][1], right[j][1])):	#move right finger clockwise
+		if(yTangplusR > yTang):	#move right finger clockwise
 			j= (j+1) % len(right)	#if we have q points in B
 		else:
 			i= (i-1) % len(left)	#if we have p points in A
