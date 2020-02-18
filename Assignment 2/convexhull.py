@@ -17,11 +17,12 @@ def yint(p1, p2, x, y3, y4):
 	x3 = x
 	x4 = x
 
-#	px = ( (x1*y2 - y1*x2) * (x3-x4) - (x1-x2) * (x3*y4 - y3*x4) ) / float( (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3-x4) )
-#	py = ( (x1*y2 - y1*x2) * (y3-y4) - (y1-y2) * (x3*y4 - y3*x4) ) / float( (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3-x4) )
+	#print(x1, " ", y1, " ", x2, " ", y2, " ", x3, " ", x4)
+	px = ( (x1*y2 - y1*x2) * (x3-x4) - (x1-x2) * (x3*y4 - y3*x4) ) / float( (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3-x4) )
+	py = ( (x1*y2 - y1*x2) * (y3-y4) - (y1-y2) * (x3*y4 - y3*x4) ) / float( (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3-x4) )
 
-	px = 0
-	py = 0
+#	px = 0
+#	py = 0
 #	px = ((x1*y2 - y1*x2) * (x3 - x4) - (x1 - x2)*(x3*y4 - y3*x4)) / \
 #		 float((x1 - x2)*(y3 - y4) - (y1 - y2)*(x3 - x4))
 #	py = ((x1*y2 - y1*x2)*(y3-y4) - (y1 - y2)*(x3*y4 - y3*x4)) / \
@@ -110,15 +111,19 @@ def merge(left, right):
 	x = lp[0] + ((rp[0] - lp[0])/2) # left's x + (right's x - left's x)/2 finds the x value between two points
 	xplusR = lp[0] + ((rp2[0] - lp[0])/2)  # x val of tangent with point right[j+1] 
 	xminusL = lp1[0] + ((rp[0] - lp1[0])/2) # x val of tangent with point left[i-1] 
+	xplusL = lp2[0] + ((rp[0] - lp2[0])/2)  # x val of tangent with point left[i+1] 
+	xminusR = lp[0] + ((rp1[0] - lp[0])/2) # x val of tangent with point right[i-1] 
 
 	### yint func returns tuples representing coords of y tangent (x,y) ###
 	yTang = yint(lp, rp, x, ly, ry) # finds y tangent for current left and right points
-	yTangplusR = yint(lp, rp2, xplusR, ly, ry4) # finds yTang with point right[j+1]    (x used to be left[i][0] but changed to xplusR)
-	yTangminusL = yint(lp2, rp, xminusL, ly3, rp) # finds yTang with point right[i-1]  (x used to be left[i][0] but changed to xminusL)
+	
+	tanClockWiseR = yint(lp, rp2, xplusR, ly, ry4) # finds yTang with point right[j+1]
+	tanClockWiseL = yint(lp2, rp, xminusL, ly4, ry) # finds yTang with point left[i+1]
+	tanCountWiseR = yint(lp, rp1, xminusR, ly, ry4) # finds yTang with point right[j-1]
+	tanCountWiseL = yint(lp1, rp, xplusL, ly3, ry) # finds yTang with point left[i-1]
 
 
-
-	while(yTangplusR[1] > yTang[1] or yTangminusL[1] > yTang[1]): # <- I think this is incorrect. we need a way to determine the preffered yTang
+	while(tanClockWiseR[1] > yTang[1] or tanCountWiseL[1] > yTang[1]): # <- I think this is incorrect. we need a way to determine the preffered yTang
 		
 	################ gonna have these vals calculated again here for the time being ####################	
 
@@ -142,24 +147,25 @@ def merge(left, right):
 
 		### yint args for x ###
 		x = lp[0] + ((rp[0] - lp[0])/2) # left's x + (right's x - left's x)/2 finds the x value between two points
+		
 		xplusR = lp[0] + ((rp2[0] - lp[0])/2)  # x val of tangent with point right[j+1] 
 		xminusL = lp1[0] + ((rp[0] - lp1[0])/2) # x val of tangent with point left[i-1] 
+		xplusL = lp2[0] + ((rp[0] - lp2[0])/2)  # x val of tangent with point left[i+1] 
+		xminusR = lp[0] + ((rp1[0] - lp[0])/2) # x val of tangent with point right[i-1] 
 
 		### yint func returns tuples representing coords of y tangent (x,y) ###
 		yTang = yint(lp, rp, x, ly, ry) # finds y tangent for current left and right points
-		yTangplusR = yint(lp, rp2, xplusR, ly, ry4) # finds yTang with point right[j+1]
-		print(yTang)
-		print("lp: ", lp)
-		print("lp[i-1]: ", lp1)
-		print(xminusL)
-		#yTangminusL = yint(lp1, rp, xminusL, ly3, ry) # finds yTang with point right[i-1]
-		yTangminusL = (0,0)
-#########################################################################################################################
+		
+		tanClockWiseR = yint(lp, rp2, xplusR, ly, ry4) # finds yTang with point right[j+1]
+		tanClockWiseL = yint(lp2, rp, xminusL, ly4, ry) # finds yTang with point left[i+1]
+		tanCountWiseR = yint(lp, rp1, xminusR, ly, ry4) # finds yTang with point right[j-1]
+		tanCountWiseL = yint(lp1, rp, xplusL, ly3, ry) # finds yTang with point left[i-1]
 
-		if(yTangplusR[1] > yTang[1]):	#move right finger clockwise
+		if(tanClockWiseR[1] > yTang[1]):	#move right finger clockwise
 			j= (j+1) % len(right)	#if we have q points in B
 		else:
 			i= (i-1) % len(left)	#if we have p points in A
+	print("Upper tangents-  left: ", left[i], "    right: ", right[i])
 	mergedHull = [left[i], right[j]] #place the upper tangent points in the new merged hull
 
 	#Brute force with two points on left
@@ -179,16 +185,50 @@ def merge(left, right):
 			if(collinear(right[i], right[i+1], right[i+2])):
 				mergedHull.extend(right)
 
-	#Find the lower tangent
+############################ Find the lower tangent ######################
 	i=0
 	j=0
-	while((yint(left[i], right[j+1], left[i][0], left[i][1], right[j+1][1]) > yint(left[i], right[j], left[i][0], left[i][1], right[j][1])) or (yint(left[i-1], right[j], left[i-1][0], left[i-1][1], right[j]) > yint(left[i], right[j], left[i][0], left[i][1], right[j][1]))):
-		if yint(left[i], right[j-1]) < yint(left[i], right[j]):	#move right finger clockwise
+	while(tanCountWiseR[1] > yTang[1] or tanClockWiseL[1] > yTang[1]): # right side is counter-clockwise, left side clockwise
+				### yint args for left ###
+		lp = left[i]  # current point in left hull
+		lp1 = left[i-1] # finds counter-clockwise point in left
+		lp2 = left[i+1] # finds clockwise point in left (currently unused)
+
+		ly = left[i][1] # y val of current left point
+		ly3 = left[i-1][1] # y of counter-clockwise point in left
+		ly4 = left[i+1][1] # y of clockwise point in left (currently unused)
+
+		### yint args for right ###
+		rp = right[j]  # current point in right hull
+		rp1 = right[j-1] # (currently unused)
+		rp2 = right[j+1]
+
+		ry = right[j][1] # y val of current right point
+		ry3 = right[j-1][1] # (currently unused)
+		ry4 = right[j+1][1]
+
+		### yint args for x ###
+		x = lp[0] + ((rp[0] - lp[0])/2) # left's x + (right's x - left's x)/2 finds the x value between two points
+		xplusR = lp[0] + ((rp2[0] - lp[0])/2)  # x val of tangent with point right[j+1] 
+		xminusL = lp1[0] + ((rp[0] - lp1[0])/2) # x val of tangent with point left[i-1] 
+		xplusL = lp2[0] + ((rp[0] - lp2[0])/2)  # x val of tangent with point left[i+1] 
+		xminusR = lp[0] + ((rp1[0] - lp[0])/2) # x val of tangent with point right[i-1] 
+
+		### yint func returns tuples representing coords of y tangent (x,y) ###
+		yTang = yint(lp, rp, x, ly, ry) # finds y tangent for current left and right points
+		
+		tanClockWiseR = yint(lp, rp2, xplusR, ly, ry4) # finds yTang with point right[j+1]
+		tanClockWiseL = yint(lp2, rp, xminusL, ly4, ry) # finds yTang with point left[i+1]
+		tanCountWiseR = yint(lp, rp1, xminusR, ly, ry4) # finds yTang with point right[j-1]
+		tanCountWiseL = yint(lp1, rp, xplusL, ly3, ry) # finds yTang with point left[i-1]
+		
+		if(tanCountWiseR[1] > yTang[1]):	#move right finger clockwise
 			j= (j-1) % len(right)	#if we have q points in B
 		else:
 			i= (i+1) % len(left)	#if we have p points in A
 
 	#add the lower tangent to the end of the new merged hull
+	print("Lower tangents-  left: ", left[i], "    right: ", right[i])
 	mergedHull.append(left[i])
 	mergedHull.append(right[j])
 
@@ -197,27 +237,24 @@ Replace the implementation of computeHull with a correct computation of the conv
 using the divide-and-conquer algorithm
 '''
 def computeHull(points):
-	#sort the given points if they are not already
 	clockwiseSort(points)
+	print("AFTER CLOCKWISE")
+	j = 0
+	for i in points:
+		j+=1
+		print(i, " - ", j)
+
+
 	#base case of three points
 	if(len(points) <= 3):
-		# print((triangleArea(points[0], points[1], points[2])))
 		return points
 	#separate the current points into two halves until the base case is reached
 	left_convex = computeHull(points[0:int(len(points)/2)])
 	right_convex = computeHull(points[int(len(points)/2):])
+	
+	#clockwiseSort(left_convex)
+	#clockwiseSort(right_convex)
 
-	#xMin = min(points, key=lambda point: points[0])
-	#xMax = max(points, key=lambda point: points[0])
-	#xMid = ((xMax-xMin)/2) + xMin
-	
-	#left_convex = []
-	#right_convex = []
-	
-	#print(xMin)
-	#for i in points
-	#	if 
-	
 	#merge the two halves back together to find the convex hull
 	merge(left_convex, right_convex)
 	return points
